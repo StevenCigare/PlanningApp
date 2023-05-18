@@ -1,0 +1,53 @@
+{% extends "base.html" %} 
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1 align="center">My Plan For The Day</h1>
+
+
+<div class="input-group date" data-provide="datepicker">
+    <input type="text" class="form-control" id="date" value="{{user.chosen_date.strftime("%m/%d/%Y")}}">   
+    <div class="input-group-append">
+        <span class="input-group-text bg-white">
+            <i class="fa fa-calendar" type="button" ></i>
+        </span>
+    </div> 
+</div>
+
+<br>
+<br>
+
+<ul class="list-group list-group-flush" id="notes">
+    <!--
+    <li class="list-group-item" id="record{{i}}">{{i}}:00  
+        <span class="close" aria-hidden="true" id="record{{i}}span"></span>       
+    </li>-->
+    {% for note in user.notes %}
+    {% if note.date == user.chosen_date %}
+        {% if note.completed %}
+        <li class="list-group-item bg-success">{{note.data}}         
+            <span class="close" aria-hidden="true">Completed</span>
+        </li>
+        {% else %}
+        <li class="list-group-item bg-danger">{{note.data}}         
+            <button type="button" class="close" onclick="deleteNote({{ note.id }})">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <button type="button" class="close" onclick="markAsDone({{note.id}})">
+                <span aria-hidden="true">&radic;</span>
+            </button>
+        </li>
+        {% endif %}
+    {% endif %}
+    {% endfor %}
+    
+</ul>
+<br><br>
+<form method="POST">
+    <textarea name="note" id="note" class="form-control"></textarea>
+    <br/>
+    <div align="center">
+        <button type="submit" class="btn btn-primary">Add note</button>
+    </div>
+</form>
+{% endblock %}
